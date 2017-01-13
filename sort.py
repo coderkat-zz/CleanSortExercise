@@ -14,19 +14,12 @@ import sys
 import string
 
 
-def sort_strings(s):
-    """Sort strings into a-z order."""
-    return()
+def consume_input(filename):
+    """Given filename (a str), write to array of strings."""
+    # Read file, split on spaces, write to an array we can then use.
+    with open(filename) as f:
+        input_array = f.read().split()
 
-
-def sort_ints(i):
-    """Sort ints smallest to largest."""
-    return()
-
-
-def consume_input(f):
-    """Given file f, write to array of strings."""
-    input_array = []
     return(input_array)
 
 

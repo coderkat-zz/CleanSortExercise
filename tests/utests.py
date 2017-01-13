@@ -13,24 +13,41 @@ Test:
     (i.e. if type(og_pattern[n] == int, type(final_arr[n]) == int)
 """
 
+import os
 import unittest
 
 from sort import (
     clean_array,
+    consume_input,
     sort_array,
 )
 
+EMPTY_TEST_FILE = os.path.join(
+    os.path.dirname(__file__),
+    'test_file_empty.txt'
+)
+TEST_FILE = os.path.join(os.path.dirname(__file__), 'test_file.txt')
 
-# class TestFileMethods(unittest.TestCase):
-#     """Tests for reading/writing to/from files."""
 
-    # def test_file_empty_graceful(self):
-    #     """Test that an empty file can be handled gracefully."""
-    #     pass
+class TestFileMethods(unittest.TestCase):
+    """Tests for reading/writing to/from files."""
 
-    # def test_print_output(self):
-    #     """Array prints as we'd expect to result.txt."""
-    #     pass
+    def test_file_empty_graceful(self):
+        """Test that an empty file can be handled gracefully."""
+        input_arr = consume_input(EMPTY_TEST_FILE)
+        self.assertEqual(input_arr, [])
+
+    def test_file_read_converts_to_arr(self):
+        """Test that a populated file will convert to arr of strings."""
+        input_arr = consume_input(TEST_FILE)
+        self.assertEqual(
+            input_arr,
+            ['apple', 'c@at', 'orange', '2', 'ban!ana']
+        )
+
+    def test_print_output_updates_file(self):
+        """Array prints as we'd expect to result.txt."""
+        pass
 
 
 class TestTextManipulationMethods(unittest.TestCase):
