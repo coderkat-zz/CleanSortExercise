@@ -11,6 +11,15 @@ Keep element types in the same order (i.e. if the nth element is an int,
 the final nth element must also be an int.)
 """
 import sys
+import string
+
+# Create a set of all ascii letters and digits
+ascii_allowed = set()
+for x in [string.ascii_letters, string.digits]:
+    ascii_allowed.update(x)
+
+# NOTE TO SELF: union like this doesn't work with Python 2.7 or earlier
+# ascii_allowed = set().union(*[string.ascii_letters, string.digits])
 
 
 def sort_strings(s):
@@ -32,16 +41,42 @@ def consume_input(f):
 def clean_array(dirty_array):
     """Prepare array for sorting.
 
-    Remove all special ascii characters from strings.
+    Remove all special ascii characters that are not letters or digits.
     Cast any number strings to int.
     Return cleaned array.
     """
+    # TODO: do we need to have an exception for something that's just
+    # unallowed chars?
+
     # given arr of strings
     # for each string in array:
-    # look for ascii set in string
+    # look for ascii neither belonging to letter set nor digit set
     # if ascii there, remove it
     # if string remaining is just made of ints, cast to int
-    return()
+
+    clean_array = []
+    for d in dirty_array:
+        # Build new string as we go
+        placeholder = ''
+        # Initialize is_digit to false
+        is_digit = False
+        # Check each character in this string. If it is not in our allowed list
+        # skip it. Otherwise, add to placeholder and check if it is a digit.
+        # TODO: will I ever have a string that has a digit in it?????? re-read
+        # directions.
+        for character in d:
+            if character in ascii_allowed:
+                placeholder += character
+                if character in string.digits:
+                    is_digit = True
+            else:
+                continue
+        if is_digit:
+            clean_array.append(int(placeholder))
+        else:
+            clean_array.append(placeholder)
+
+    return(clean_array)
 
 
 def sort_array(array):

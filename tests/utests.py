@@ -54,10 +54,10 @@ class TestTextManipulationMethods(unittest.TestCase):
         self.assertEqual(cleaned[0], self.expected_str)
         self.assertEqual(cleaned[1], self.expected_int)
 
-    # def test_all_numbers_to_int(self):
-    #     """Test that all strs containing numbers are cast to ints."""
-    #     # i.e. '523' --> 532
-    #     pass
+    def test_all_numbers_to_int(self):
+        """Test that all strs containing numbers are cast to ints."""
+        cleaned = clean_array(self.dirty_array)
+        self.assertEqual(type(cleaned[1]), int)
 
 
 class TestSortMethods(unittest.TestCase):
