@@ -15,8 +15,10 @@ Test:
 
 import os
 import unittest
+import unittest.mock
 
 from sort import (
+    clean_and_sort,
     clean_array,
     consume_input,
     sort_array,
@@ -59,6 +61,12 @@ class TestFileMethods(unittest.TestCase):
             input_arr,
             ['apple', 'c@at', 'orange', '2', 'ban!ana']
         )
+
+    @unittest.mock.patch('sort.clean_array')
+    def test_empty_file_does_not_take_unnecessary_steps(self, mock_clean):
+        """Empty input file should skip all checks and sorting and return."""
+        clean_and_sort(self.empty_file, self.test_output_file)
+        self.assertEqual(mock_clean.called, False)
 
     def test_print_output_updates_file(self):
         """Array prints as we'd expect to result.txt."""

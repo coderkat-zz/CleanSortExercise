@@ -17,7 +17,7 @@ import string
 def consume_input(filename):
     """Given filename (a str), write to array of strings."""
     # Read file, split on spaces, write to an array we can then use.
-    # TODO: with open() should implicitly close after:
+    # TODO: 'with open()' should implicitly close after:
     # double check that this is true.
     with open(filename) as f:
         input_array = f.read().split()
@@ -125,6 +125,10 @@ def clean_and_sort(input_file, output_file):
     """Main function to consume file, sort, and write to output."""
     # Translate file to array of strings
     input_array = consume_input(input_file)
+    # If we started with an empty file, don't waste time doing everything here.
+    if len(input_array) == 0:
+        return
+
     # Clean array of faulty input and set types
     cleaned_array = clean_array(input_array)
     # Sort the array, keeping types in place
