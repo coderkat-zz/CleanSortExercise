@@ -13,14 +13,6 @@ the final nth element must also be an int.)
 import sys
 import string
 
-# Create a set of all ascii letters and digits
-ascii_allowed = set()
-for x in [string.ascii_letters, string.digits]:
-    ascii_allowed.update(x)
-
-# NOTE TO SELF: union like this doesn't work with Python 2.7 or earlier
-# ascii_allowed = set().union(*[string.ascii_letters, string.digits])
-
 
 def sort_strings(s):
     """Sort strings into a-z order."""
@@ -48,11 +40,9 @@ def clean_array(dirty_array):
     # TODO: do we need to have an exception for something that's just
     # unallowed chars?
 
-    # given arr of strings
-    # for each string in array:
-    # look for ascii neither belonging to letter set nor digit set
-    # if ascii there, remove it
-    # if string remaining is just made of ints, cast to int
+    # Create a set of all ascii letters and digits
+    # NOTE TO SELF: union like this doesn't work with Python 2.7 or earlier
+    ascii_allowed = set().union(*[string.ascii_letters, string.digits])
 
     clean_array = []
     for d in dirty_array:
@@ -104,28 +94,14 @@ def sort_array(array):
 
     # Sort string list, int list
     # TODO:be sure on this implementation
-    # .sort() mutates the list, whereas sorted(mylist) would return
-    # a sorted list, leaving the original list unchanged.
-    # For our purposes, I think this is fiiiiine.... since we
-    # no longer care about the unsorted crap.
     string_arr.sort()
     int_arr.sort()
 
-    # Once I have my sorted lists, determine whether i need to insert
-    # a string or an int into my output_arr, and append the next item
-    # from the appropriate list.
-
-    # Build output array from new array
+    # Build output array from new array, mantaining type order.
     output_arr = []
     int_tracker = 0
     str_tracker = 0
-    # for a in range(len(array)):
-    #     if type(array[a]) == int:
-    #         output_arr[a] = sorted_ints[int_tracker]
-    #         int_tracker += 1
-    #     else:
-    #         output_arr[a] = sorted_strings[str_tracker]
-    #         str_tracker += 1
+
     for a in array:
         if type(a) == int:
             output_arr.append(int_arr[int_tracker])
