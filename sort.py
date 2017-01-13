@@ -129,7 +129,6 @@ def clean_and_sort(input_file, output_file):
     cleaned_array = clean_array(input_array)
     # Sort the array, keeping types in place
     sorted_array = sort_array(cleaned_array)
-    print(sorted_array)
     # Write sorted_array to file:
     write_to_output(output_file, sorted_array)
 
