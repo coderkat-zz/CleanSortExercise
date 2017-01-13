@@ -81,8 +81,60 @@ def clean_array(dirty_array):
 
 def sort_array(array):
     """Given an array of strings and ints, sort."""
-    # Get
-    return()
+    # Array looks something like:
+    # ['hello', 235, 'what', 0, 'idk', -12, 'y', 'x', 'z', 3]
+    # for every string in the list, get strings in order
+    # ...create list of strings, then sort
+    # for every int in list, get ints in order
+    # ...create list of ints, then sort
+    # TODO: is this better with sets?? Probably, but figure out why...
+    string_arr = []
+    int_arr = []
+
+    # Build out a string array and an int array for sorting
+    # TODO: can probably build this and sort at the same time,
+    # figure it out when optimizing code.
+    for a in array:
+        if type(a) == int:
+            int_arr.append(a)
+        # No need to do an explicit check since we've already ensured these
+        # two types.
+        else:
+            string_arr.append(a)
+
+    # Sort string list, int list
+    # TODO:be sure on this implementation
+    # .sort() mutates the list, whereas sorted(mylist) would return
+    # a sorted list, leaving the original list unchanged.
+    # For our purposes, I think this is fiiiiine.... since we
+    # no longer care about the unsorted crap.
+    string_arr.sort()
+    int_arr.sort()
+
+    # Once I have my sorted lists, determine whether i need to insert
+    # a string or an int into my output_arr, and append the next item
+    # from the appropriate list.
+
+    # Build output array from new array
+    output_arr = []
+    int_tracker = 0
+    str_tracker = 0
+    # for a in range(len(array)):
+    #     if type(array[a]) == int:
+    #         output_arr[a] = sorted_ints[int_tracker]
+    #         int_tracker += 1
+    #     else:
+    #         output_arr[a] = sorted_strings[str_tracker]
+    #         str_tracker += 1
+    for a in array:
+        if type(a) == int:
+            output_arr.append(int_arr[int_tracker])
+            int_tracker += 1
+        else:
+            output_arr.append(string_arr[str_tracker])
+            str_tracker += 1
+
+    return(output_arr)
 
 
 def clean_and_sort(input_file, output_file):
