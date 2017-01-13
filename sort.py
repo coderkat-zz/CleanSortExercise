@@ -17,10 +17,25 @@ import string
 def consume_input(filename):
     """Given filename (a str), write to array of strings."""
     # Read file, split on spaces, write to an array we can then use.
+    # TODO: with open() should implicitly close after:
+    # double check that this is true.
     with open(filename) as f:
         input_array = f.read().split()
 
     return(input_array)
+
+
+def write_to_output(filename, sorted_array):
+    """Given our sorted list, write to output file."""
+    # We need to stringify our list to write it out:
+    # for i in list, convert to string
+    # then, new_string = ' '.join(list)
+    for i in range(len(sorted_array)):
+        sorted_array[i] = str(sorted_array[i])
+    stringified = ' '.join(sorted_array)
+    # then write new_string to output file
+    with open(filename, 'w') as f:
+        f.write(stringified)
 
 
 def clean_array(dirty_array):
@@ -108,10 +123,15 @@ def sort_array(array):
 
 def clean_and_sort(input_file, output_file):
     """Main function to consume file, sort, and write to output."""
+    # Translate file to array of strings
     input_array = consume_input(input_file)
+    # Clean array of faulty input and set types
     cleaned_array = clean_array(input_array)
+    # Sort the array, keeping types in place
     sorted_array = sort_array(cleaned_array)
-    return(sorted_array)
+    print(sorted_array)
+    # Write sorted_array to file:
+    write_to_output(output_file, sorted_array)
 
 
 if __name__ == '__main__':

@@ -20,26 +20,41 @@ from sort import (
     clean_array,
     consume_input,
     sort_array,
+    write_to_output,
 )
-
-EMPTY_TEST_FILE = os.path.join(
-    os.path.dirname(__file__),
-    'test_file_empty.txt'
-)
-TEST_FILE = os.path.join(os.path.dirname(__file__), 'test_file.txt')
 
 
 class TestFileMethods(unittest.TestCase):
     """Tests for reading/writing to/from files."""
 
+    def setUp(self):
+        """Set up test files for reading and writing."""
+        self.empty_file = os.path.join(
+            os.path.dirname(__file__),
+            'test_file_empty.txt'
+        )
+        self.test_input_file = os.path.join(
+            os.path.dirname(__file__),
+            'test_file.txt'
+        )
+        self.test_output_file = os.path.join(
+            os.path.dirname(__file__),
+            'test_output.txt'
+        )
+        self.test_output_name = 'test_output.txt'
+
+    def tearDown(self):
+        """Empty an output file if we wrote to one."""
+        open('test_output.txt', 'w').close()
+
     def test_file_empty_graceful(self):
         """Test that an empty file can be handled gracefully."""
-        input_arr = consume_input(EMPTY_TEST_FILE)
+        input_arr = consume_input(self.empty_file)
         self.assertEqual(input_arr, [])
 
     def test_file_read_converts_to_arr(self):
         """Test that a populated file will convert to arr of strings."""
-        input_arr = consume_input(TEST_FILE)
+        input_arr = consume_input(self.test_input_file)
         self.assertEqual(
             input_arr,
             ['apple', 'c@at', 'orange', '2', 'ban!ana']
@@ -47,7 +62,24 @@ class TestFileMethods(unittest.TestCase):
 
     def test_print_output_updates_file(self):
         """Array prints as we'd expect to result.txt."""
-        pass
+        sorted_array = ['a', 2, 'cs', 5, 7, 'zed']
+        write_to_output(self.test_output_name, sorted_array)
+        with open(self.test_output_name) as f:
+            written = f.readline()
+        self.assertEqual(
+            written,
+            'a 2 cs 5 7 zed'
+        )
+
+    def test_print_output_handles_empty_str(self):
+        """If input file was empty, gracefully write nothing to output."""
+        write_to_output(self.test_output_name, [])
+        with open(self.test_output_name) as f:
+            written = f.readline()
+        self.assertEqual(
+            written,
+            ''
+        )
 
 
 class TestTextManipulationMethods(unittest.TestCase):
