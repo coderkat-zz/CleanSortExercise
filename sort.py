@@ -2,52 +2,47 @@
 
 Sort a list of integers and strings.
 
-Write a program that takes a list of strings containing integers and
+This program akes a list of strings containing integers and
 words and returns a sorted version of the list.
 
-All words must be in alphabetical order, all ints sorted numberically.
+All words must be in alphabetical order, all integerss sorted numberically.
 
-Keep element types in the same order (i.e. if the nth element is an int,
-the final nth element must also be an int.)
+This keeps element types in the same order (i.e. if the nth element is an
+int, the final nth element must also be an int.)
 """
 import sys
 import string
 
 
 def consume_input(filename):
-    """Given filename (a str), write to array of strings."""
-    # Read file, split on spaces, write to an array we can then use.
-    # TODO: 'with open()' should implicitly close after:
-    # double check that this is true.
+    """Given filename, write to array of strings."""
     with open(filename) as f:
         input_array = f.read().split()
-
     return(input_array)
 
 
 def write_to_output(filename, sorted_array):
-    """Given our sorted list, write to output file."""
-    # We need to stringify our list to write it out:
-    # for i in list, convert to string
-    # then, new_string = ' '.join(list)
+    """Given our sorted list, convert to string and write to output file."""
     for i in range(len(sorted_array)):
         sorted_array[i] = str(sorted_array[i])
     stringified = ' '.join(sorted_array)
 
-    # then write new_string to output file
-    with open(filename, 'w') as f:
-        f.write(stringified)
+    try:
+        with open(filename, 'w') as f:
+            f.write(stringified)
+    except IOError as e:
+        print("IO error: {0}".format(e))
 
 
 def clean_array(array):
-    """Prepare array for sorting.
+    """Prepare array of given strings for sorting.
 
-    Remove all special ascii characters that are not letters or digits.
-    Cast any number strings to int.
-    Return cleaned array, as well as arrays of cleaned ints and strs.
+    - Remove all special ascii characters that are not letters or digits.
+    - Cast any numeric strings to integers.
+    - Return cleaned array, as well as arrays of cleaned ints and strs.
     """
     # Create a set of all ascii letters and digits
-    # NOTE TO SELF: union like this doesn't work with Python 2.7 or earlier
+    # NB: union() like this doesn't work with Python 2.7 or earlier
     ascii_allowed = set().union(*[string.ascii_letters, string.digits])
 
     strs = []
@@ -57,7 +52,7 @@ def clean_array(array):
         # Build new (clean) string as we go
         placeholder = ''
 
-        # If starts with hyphen, might be a neg number: don'tlose it.
+        # If starts with hyphen, might be a negative number: don't lose it.
         if array[i][0] == '-':
             placeholder += '-'
 
@@ -74,7 +69,7 @@ def clean_array(array):
             array[i] = int(placeholder)
             ints.append(int(placeholder))
         else:
-            # Check to make sure we don't have a '-' in the str.
+            # Check to make sure we don't have a erroneous '-' in a string.
             if placeholder[0] == '-':
                 placeholder = placeholder[1:]
             array[i] = placeholder
@@ -85,7 +80,7 @@ def clean_array(array):
 
 def sort_array(array):
     """Given an array of strings and ints, sort."""
-    # Clean string, cast digits to int and return ints and digit arrays.
+    # Clean string, also returns separated lists of integers and strings.
     cleaned, string_arr, int_arr = clean_array(array)
 
     # Sort strings and ints.
@@ -95,7 +90,6 @@ def sort_array(array):
     # Update 'cleaned' in place with sorted ints and strings.
     int_tracker = 0
     str_tracker = 0
-
     for i in range(len(cleaned)):
         if type(cleaned[i]) == int:
             cleaned[i] = int_arr[int_tracker]
@@ -109,8 +103,13 @@ def sort_array(array):
 
 def clean_and_sort(input_file, output_file):
     """Main function to consume file, sort, and write to output."""
-    # Read file to array of strings
-    input_array = consume_input(input_file)
+    # Read file to get array of strings. If file not found, or other
+    # IO exception occurs, print error and gracefully exit.
+    try:
+        input_array = consume_input(input_file)
+    except IOError as e:
+        print("IO error: {0}".format(e))
+        return
 
     # If we started with an empty file, don't waste time doing everything here.
     if len(input_array) == 0:

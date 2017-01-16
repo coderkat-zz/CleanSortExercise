@@ -1,17 +1,4 @@
-"""
-
-Unittests to run for sort.py challenge.
-
-Test:
-- Can consume an empty file.
-- I write what I expect I will to my array.
-- clean_data removes ascii special characters
-- all ints are cast to int
-- alphasort works
-- numsort works
-- check that final_arr types follow og_array pattern
-    (i.e. if type(og_pattern[n] == int, type(final_arr[n]) == int)
-"""
+"""Unittests to run for sort.py challenge."""
 
 import os
 import unittest
