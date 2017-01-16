@@ -96,26 +96,36 @@ class TestTextManipulationMethods(unittest.TestCase):
     def setUp(self):
         """Create string and int for string manipulation testing."""
         input_string = 'Hel&lo!'
-        input_int = '~12#3@4'
+        input_int = '-~12#3@4'
         self.dirty_array = [input_string, input_int]
         self.expected_str = 'Hello'
-        self.expected_int = 1234
+        self.expected_int = -1234
 
     def test_clean_data_does_not_change_arr_length(self):
         """Test that the array stays the same length after we clean it."""
-        cleaned = clean_array(self.dirty_array)
+        cleaned, strs, ints = clean_array(self.dirty_array)
         self.assertEqual(len(cleaned), len(self.dirty_array))
 
     def test_clean_data_removes_chars(self):
         """Test that special characters like "$" are removed."""
-        cleaned = clean_array(self.dirty_array)
+        cleaned, strs, ints = clean_array(self.dirty_array)
         self.assertEqual(cleaned[0], self.expected_str)
         self.assertEqual(cleaned[1], self.expected_int)
 
     def test_all_numbers_to_int(self):
         """Test that all strs containing numbers are cast to ints."""
-        cleaned = clean_array(self.dirty_array)
+        cleaned, strs, ints = clean_array(self.dirty_array)
         self.assertEqual(type(cleaned[1]), int)
+
+    def test_clean_data_honors_negative_ints(self):
+        """Test that a negative int remains negative."""
+        cleaned, strs, ints = clean_array(self.dirty_array)
+        self.assertEqual(cleaned[1], -1234)
+
+    def test_clean_data_handles_neg_sign_on_str(self):
+        """If input string is '-n' where n is a string, remove '-'."""
+        cleaned, strs, ints = clean_array(['-aaaaaaa'])
+        self.assertEqual(cleaned[0], 'aaaaaaa')
 
 
 class TestSortMethods(unittest.TestCase):
@@ -123,9 +133,12 @@ class TestSortMethods(unittest.TestCase):
 
     def setUp(self):
         """Create a string_lists to sort and int_lists to sort."""
-        self.original_list = ['hello', 1, 4, 0, 'banana', 'a', -30, 'zed', 2]
+        self.original_list = [
+            'he$llo', '*1', '4!', '0', '-banana', 'a', '-30', 'zed'
+        ]
+        self.original_cleaned = ['hello', 1, 4, 0, 'banana', 'a', -30, 'zed']
         self.sorted_list = ['a', -30, 0, 1, 'banana', 'hello', 2, 'zed', 4]
-        self.just_ints = [1, 5, 0, -2, 3, -20, 400]
+        self.just_ints = ['1', '5', '0', '-2', '3', '-20', '400']
         self.just_strs = ['hello', 'a', 'zed', 'banana', 'cats', 'aaa']
 
     def test_sort_array_does_not_change_len(self):
@@ -137,12 +150,18 @@ class TestSortMethods(unittest.TestCase):
         """Each index should honor type of original array at that index."""
         sorted_arr = sort_array(self.original_list)
         for i in range(len(self.original_list)):
-            self.assertEqual(type(self.original_list[i]), type(sorted_arr[i]))
+            self.assertEqual(
+                type(self.original_cleaned[i]),
+                type(sorted_arr[i])
+            )
 
     def test_sort_array_only_ints(self):
         """Test that method works if only ints in original array."""
         sorted_ints = sort_array(self.just_ints)
-        self.assertEqual(sorted_ints, sorted(self.just_ints))
+        self.assertEqual(
+            sorted_ints,
+            [-20, -2, 0, 1, 3, 5, 400]
+        )
 
     def test_sort_array_only_strs(self):
         """Test that method works if only strings in original array."""

@@ -33,106 +33,93 @@ def write_to_output(filename, sorted_array):
     for i in range(len(sorted_array)):
         sorted_array[i] = str(sorted_array[i])
     stringified = ' '.join(sorted_array)
+
     # then write new_string to output file
     with open(filename, 'w') as f:
         f.write(stringified)
 
 
-def clean_array(dirty_array):
+def clean_array(array):
     """Prepare array for sorting.
 
     Remove all special ascii characters that are not letters or digits.
     Cast any number strings to int.
-    Return cleaned array.
+    Return cleaned array, as well as arrays of cleaned ints and strs.
     """
-    # TODO: do we need to have an exception for something that's just
-    # unallowed chars?
-
     # Create a set of all ascii letters and digits
     # NOTE TO SELF: union like this doesn't work with Python 2.7 or earlier
     ascii_allowed = set().union(*[string.ascii_letters, string.digits])
 
-    clean_array = []
-    for d in dirty_array:
-        # Build new string as we go
+    strs = []
+    ints = []
+
+    for i in range(len(array)):
+        # Build new (clean) string as we go
         placeholder = ''
-        # Initialize is_digit to false
-        is_digit = False
+
+        # If starts with hyphen, might be a neg number: don'tlose it.
+        if array[i][0] == '-':
+            placeholder += '-'
+
         # Check each character in this string. If it is not in our allowed list
-        # skip it. Otherwise, add to placeholder and check if it is a digit.
-        # TODO: will I ever have a string that has a digit in it?????? re-read
-        # directions.
-        for character in d:
+        # skip it. Otherwise, add to placeholder.
+        for character in array[i]:
             if character in ascii_allowed:
                 placeholder += character
-                if character in string.digits:
-                    is_digit = True
             else:
                 continue
-        if is_digit:
-            clean_array.append(int(placeholder))
-        else:
-            clean_array.append(placeholder)
 
-    return(clean_array)
+        # Check to see if the cleaned string is made of digits, cast to int()
+        if placeholder[-1] in string.digits:
+            array[i] = int(placeholder)
+            ints.append(int(placeholder))
+        else:
+            # Check to make sure we don't have a '-' in the str.
+            if placeholder[0] == '-':
+                placeholder = placeholder[1:]
+            array[i] = placeholder
+            strs.append(placeholder)
+
+    return(array, strs, ints)
 
 
 def sort_array(array):
     """Given an array of strings and ints, sort."""
-    # Array looks something like:
-    # ['hello', 235, 'what', 0, 'idk', -12, 'y', 'x', 'z', 3]
-    # for every string in the list, get strings in order
-    # ...create list of strings, then sort
-    # for every int in list, get ints in order
-    # ...create list of ints, then sort
-    # TODO: is this better with sets?? Probably, but figure out why...
-    string_arr = []
-    int_arr = []
+    # Clean string, cast digits to int and return ints and digit arrays.
+    cleaned, string_arr, int_arr = clean_array(array)
 
-    # Build out a string array and an int array for sorting
-    # TODO: can probably build this and sort at the same time,
-    # figure it out when optimizing code.
-    for a in array:
-        if type(a) == int:
-            int_arr.append(a)
-        # No need to do an explicit check since we've already ensured these
-        # two types.
-        else:
-            string_arr.append(a)
-
-    # Sort string list, int list
-    # TODO:be sure on this implementation
+    # Sort strings and ints.
     string_arr.sort()
     int_arr.sort()
 
-    # Build output array from new array, mantaining type order.
-    output_arr = []
+    # Update 'cleaned' in place with sorted ints and strings.
     int_tracker = 0
     str_tracker = 0
 
-    for a in array:
-        if type(a) == int:
-            output_arr.append(int_arr[int_tracker])
+    for i in range(len(cleaned)):
+        if type(cleaned[i]) == int:
+            cleaned[i] = int_arr[int_tracker]
             int_tracker += 1
         else:
-            output_arr.append(string_arr[str_tracker])
+            cleaned[i] = string_arr[str_tracker]
             str_tracker += 1
 
-    return(output_arr)
+    return(cleaned)
 
 
 def clean_and_sort(input_file, output_file):
     """Main function to consume file, sort, and write to output."""
-    # Translate file to array of strings
+    # Read file to array of strings
     input_array = consume_input(input_file)
+
     # If we started with an empty file, don't waste time doing everything here.
     if len(input_array) == 0:
+        write_to_output(output_file, input_array)
         return
 
-    # Clean array of faulty input and set types
-    cleaned_array = clean_array(input_array)
-    # Sort the array, keeping types in place
-    sorted_array = sort_array(cleaned_array)
+    # Sort array, keeping types in place.
+    sorted_array = sort_array(input_array)
+
     # Write sorted_array to file:
     write_to_output(output_file, sorted_array)
 
