@@ -56,13 +56,25 @@ def clean_array(array):
         if array[i][0] == '-':
             placeholder += '-'
 
-        # Check each character in this string. If it is not in our allowed list
-        # skip it. Otherwise, add to placeholder.
-        for character in array[i]:
-            if character in ascii_allowed:
-                placeholder += character
-            else:
-                continue
+        # cast the word to a set & compare lengths! From the docs(Python3.5):
+        # Two sets are equal if and only if every element of each set is
+        # contained in the other (each is a subset of the other). A set is
+        # less than another set if and only if the first set is a proper subset
+        # of the second set (is a subset, but is not equal).
+        # A set is greater than another set if and only if the first set is a
+        # proper superset of the second set (is a superset, but is not equal).
+
+        if set(array[i]) <= ascii_allowed:
+            # we know it's all allowed characters: don't do anything
+            placeholder += array[i]
+
+        # Use python's .translate(), which returns a copy of the string in
+        # which each character has been mapped through the translation table
+        else:
+            translation_table = dict.fromkeys(
+                map(ord, string.punctuation), None
+            )
+            placeholder += array[i].translate(translation_table)
 
         # Check to see if the cleaned string is made of digits, cast to int()
         if placeholder[-1] in string.digits:
@@ -127,9 +139,11 @@ if __name__ == '__main__':
     # Handle missing args gracefully.
     if not len(sys.argv) == 3:
         print("""
-            This program requires exactly two arguments:
+            This program requires exactly two arguments, separated by a space:
             1) the path to the input.txt file, and
             2) the path to result.txt
+
+            $ python3 sort.py path/to/input_file.txt path/to/output_file.txt
 
             Please try again!
         """)
