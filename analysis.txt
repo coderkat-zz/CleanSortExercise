@@ -1,19 +1,56 @@
 Approach and Analysis:
 
-To tackle this problem, I broke apart its components (read, clean, sort, and write) into distinct functions that my program could then run. While this increased complexity a bit by adding function calls to the program's execution, it allowed me to easily test my program's component parts and made the logic easier to follow.
+To tackle this problem, I broke apart its components (read, clean, sort, and write)
+into distinct functions that my program could then run. While this increased complexity
+a bit by adding function calls to the program's execution, it allowed me to easily test
+ my program's component parts and made the logic easier to follow.
 
-I first created a small suite of tests to check that my code passed all the stated requirements as I wrote it, and did most of my coding with a red/green refactor approach to testing. This was extremely helpful when I took some time to go back and optimize my solution.
+I first created a small suite of tests to check that my code passed all the stated
+requirements as I wrote it, and did most of my coding with a red/green refactor
+approach to testing. This was extremely helpful when I took some time to go back and
+optimize my solution.
 
-In cleaning the text of non-letter and non-integer characters, I built a set of 'allowed' characters using Python's string module (found in the Python standard library). This module gives access to ascii_letters and digits, which, when cast to a Python set, make for a very fast lookup. (Note that my choice of set construction with update() would not work with Python versions earlier than Python3, and if this program needed to run under older versions, I would refactor line 44 of sort.py).
+In cleaning the text of non-letter and non-integer characters, I built a set of
+'allowed' characters using Python's string module (found in the Python standard
+library). This module gives access to ascii_letters and digits, which, when cast to a
+Python set, make for a very fast lookup. (Note that my choice of set construction with
+update() would not work with Python versions earlier than Python3, and if this program
+needed to run under older versions, I would refactor line 44 of sort.py).
 
-My very first pass at this solution added a data structure to store a cleaned list, appending as I cleaned, but I went back and refactored in order to clean the array in place, sparing an added data store. However, this method does also build two new data structures (lists) so that we can later sort them quickly, and find integers and strings as necessary. The time complexity of this piece of code is roughly O(n) (or, to be a little more precise, O(a*w) where a is the length of the array and w is the length of each word in the array).
+My very first pass at this solution added a data structure to store a cleaned list,
+appending as I cleaned, but I went back and refactored in order to clean the array in
+place, sparing an added data store. On a third refactor pass, I decided to utilize
+python's sets and compare each word, cast to a set, to the set of allowed characters.
+I then uses Python's translate method, which returns a copy of the string in
+which each character has been mapped through the translation table, removing any
+punctuation characters.
 
-For sorting the cleaned array, I first used Python's sort() method to sort my unique arrays of integers and strings. Python's sort() utilizes the 'Timsort' sorting algorithm, which is derived from insertion sort and merge sort. In a worst-case scenario, Timsort takes O(n log n) to sort an array of n elements: in the best case (i.e. if the array is already in order), Timsort runs in linear time O(1).
+This method does also build two new data structures (lists) so that we can later sort them quickly, and find integers and strings as necessary.
 
-After sorting the arrays of strings and integers, I built the sorted list in place by iterating through the indeces of the cleaned array and simply replacing with the appropriate in-order string or integer, which takes approximately O(n) time, where n is the length of the array. A little bit of space is taken up by my int_tracker and str_tracker variables, initialized to help keep track of order in the sorted lists.
+For sorting the cleaned array, I first used Python's sort() method to sort my unique
+arrays of integers and strings. Python's sort() utilizes the 'Timsort' sorting
+algorithm, which is derived from insertion sort and merge sort. In a worst-case
+scenario, Timsort takes O(n log n) to sort an array of n elements: in the best case
+(i.e. if the array is already in order), Timsort runs in linear time O(1).
+
+
+After sorting the arrays of strings and integers, I built the sorted list in place by
+iterating through the indeces of the cleaned array and simply replacing with the
+appropriate in-order string or integer, which takes approximately O(n) time, where n is
+the length of the array. A little bit of space is taken up by my int_tracker and
+str_tracker variables, initialized to help keep track of order in the sorted lists.
 
 Further optimization ideas:
 
-If I were to take more time with this to optimize, I would spend some time trying to figure out a more elegant/efficient way to handle possible negative numbers. Right now, I do work on each string to allow it to be negative, then alter again if an input string was actually something like '-aaaa' rather than a true negative number. I feel like there might be a better way to do this.
+If I were to take more time with this to optimize, I would spend some time trying to
+figure out a more elegant/efficient way to handle possible negative numbers. Right now,
+ I do work on each string to allow it to be negative, then alter again if an input
+ string was actually something like '-aaaa' rather than a true negative number. I feel
+like there might be a better way to do this.
 
-I would also give more thought to ways to only iterate through the original list of strings once, rather than taking one pass to clean and one pass to sort. I still do like breaking these functions apart for readability, testing, and maintainability, but I have a feeling that I'm sacrificing a bit in both algorithmic time complexity as well as a pure number of function calls. For now, that's a tradeoff I'm very happy to make.
+I would also give more thought to ways to only iterate through the original list of
+strings once, rather than taking one pass to clean and one pass to sort. I still do
+like breaking these functions apart for readability, testing, and maintainability, but
+I have a feeling that I'm sacrificing a bit in both algorithmic time complexity as well
+ as a pure number of function calls. For now, that's a tradeoff I'm very happy to make.
+
