@@ -25,7 +25,8 @@ I then uses Python's translate method, which returns a copy of the string in
 which each character has been mapped through the translation table, removing any
 punctuation characters.
 
-This method does also build two new data structures (lists) so that we can later sort them quickly, and find integers and strings as necessary.
+This method does also build two new data structures (lists) so that we can later sort them
+quickly, and find integers and strings as necessary.
 
 For sorting the cleaned array, I first used Python's sort() method to sort my unique
 arrays of integers and strings. Python's sort() utilizes the 'Timsort' sorting
