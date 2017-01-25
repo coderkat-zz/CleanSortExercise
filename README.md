@@ -10,3 +10,19 @@ before sorting.
 * This keeps element types in the same order (i.e. if the nth element is an
 int, the final nth element must also be an int.)
 * Program prints cleaned/sorted list to a new text file
+
+## Instructions for running the code
+To try this yourself:
+Using Python3, simply
+```
+$ python sort.py path/to/inputfile.txt path/to/outputfile.txt
+```
+
+To run unit tests:
+```
+$ python -m unittest tests/utests.py
+```
+
+If your system isn't set up to use Python3 by default, you can spin
+up a virtual environment to do so for this program! Follow this
+[guide to virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/).
