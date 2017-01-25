@@ -2,13 +2,13 @@
 
 Sort a list of integers and strings.
 
-This program akes a list of strings containing integers and
+This program takes a list of strings containing integers and
 words and returns a sorted version of the list.
 
 All words must be in alphabetical order, all integerss sorted numberically.
 
-This keeps element types in the same order (i.e. if the nth element is an
-int, the final nth element must also be an int.)
+This keeps element types in the same order (i.e. if the nth element of the
+original list is an int, the final nth element must also be an int.)
 """
 import sys
 import string
