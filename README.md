@@ -11,6 +11,9 @@ before sorting.
 int, the final nth element must also be an int.)
 * Program prints cleaned/sorted list to a new text file
 
+Example input: `20 cat bi?rd 12 do@g`
+Desired output: `12 bird cat 20 dog`
+
 ## Instructions for running the code
 To try this yourself:
 Using Python3, simply
